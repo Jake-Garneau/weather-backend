@@ -18,9 +18,9 @@ class CurrentWeather(Base):
     __tablename__ = "current_weather"
 
     id = Column(Integer, primary_key=True, index=True)
-    dt = Column(DateTime, nullable=False)
-    sunrise = Column(DateTime)
-    sunset = Column(DateTime)
+    dt = Column(DateTime(timezone=True), nullable=False)
+    sunrise = Column(DateTime(timezone=True))
+    sunset = Column(DateTime(timezone=True))
     temp = Column(Float)
     feels_like = Column(Float)
     pressure = Column(Integer)
@@ -42,7 +42,7 @@ class HourlyWeather(Base):
     __tablename__ = "hourly_weather"
 
     id = Column(Integer, primary_key=True, index=True)
-    dt = Column(DateTime, nullable=False)
+    dt = Column(DateTime(timezone=True), nullable=False)
     temp = Column(Float)
     feels_like = Column(Float)
     pressure = Column(Integer)
@@ -65,11 +65,11 @@ class DailyWeather(Base):
     __tablename__ = "daily_weather"
 
     id = Column(Integer, primary_key=True, index=True)
-    dt = Column(DateTime, nullable=False)
-    sunrise = Column(DateTime)
-    sunset = Column(DateTime)
-    moonrise = Column(DateTime)
-    moonset = Column(DateTime)
+    dt = Column(DateTime(timezone=True), nullable=False)
+    sunrise = Column(DateTime(timezone=True))
+    sunset = Column(DateTime(timezone=True))
+    moonrise = Column(DateTime(timezone=True))
+    moonset = Column(DateTime(timezone=True))
     moon_phase = Column(Float)
     summary = Column(String)
     temp_day = Column(Float)

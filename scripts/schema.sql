@@ -15,9 +15,9 @@ CREATE TABLE locations (
 
 CREATE TABLE current_weather (
     id SERIAL PRIMARY KEY,
-    dt TIMESTAMP NOT NULL,
-    sunrise TIMESTAMP,
-    sunset TIMESTAMP,
+    dt TIMESTAMP WITH TIME ZONE NOT NULL,
+    sunrise TIMESTAMP WITH TIME ZONE,
+    sunset TIMESTAMP WITH TIME ZONE,
     temp FLOAT,
     feels_like FLOAT,
     pressure INTEGER,
@@ -38,7 +38,7 @@ CREATE TABLE current_weather (
 
 CREATE TABLE hourly_weather (
     id SERIAL PRIMARY KEY,
-    dt TIMESTAMP NOT NULL,
+    dt TIMESTAMP WITH TIME ZONE NOT NULL,
     temp FLOAT,
     feels_like FLOAT,
     pressure INTEGER,
@@ -60,11 +60,11 @@ CREATE TABLE hourly_weather (
 
 CREATE TABLE daily_weather (
     id SERIAL PRIMARY KEY,
-    dt TIMESTAMP NOT NULL,
-    sunrise TIMESTAMP,
-    sunset TIMESTAMP,
-    moonrise TIMESTAMP,
-    moonset TIMESTAMP,
+    dt TIMESTAMP WITH TIME ZONE NOT NULL,
+    sunrise TIMESTAMP WITH TIME ZONE,
+    sunset TIMESTAMP WITH TIME ZONE,
+    moonrise TIMESTAMP WITH TIME ZONE,
+    moonset TIMESTAMP WITH TIME ZONE,
     moon_phase FLOAT,
     summary TEXT,
     temp_day FLOAT,
