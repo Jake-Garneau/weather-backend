@@ -7,10 +7,10 @@ from app.db import async_session
 from app.models import Location, CurrentWeather, HourlyWeather, DailyWeather
 
 # weather API call
-async def fetch_weather() -> dict:
+async def fetch_weather(lat: float, lon: float) -> dict:
     params = {
-        "lat": os.getenv("LAT"),
-        "lon": os.getenv("LON"),
+        "lat": lat,
+        "lon": lon,
         "exclude": "minutely, alerts",
         "appid": os.getenv("WEATHER_KEY"),
         "units": "imperial",
@@ -149,7 +149,20 @@ async def store_weather(data: dict):
         logging.info("Weather data stored successfully.")
 
 async def job():
-    # fetch and store weather, called by scheduler
-    data = await fetch_weather()
-    if data:
-        await store_weather(data)
+    cities = ["1","2","3"]
+    
+    for city in cities:
+        lat = os.getenv(f"CITY{city}_LAT")
+        lon = os.getenv(f"CITY{city}_LON")
+
+        if not lat or not lon:
+            logging.warning(f"Skipping CITY{city} — missing lat/lon in env")
+            continue
+
+        logging.info(f"Fetching weather for CITY{city} at {lat}, {lon}")
+        try:
+            data = await fetch_weather(lat,lon)
+            if data:
+                await store_weather(data)
+        except Exception as e:
+            logging.error(f"Failed to fetch/store weather for CITY{city}: {e}")

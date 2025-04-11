@@ -8,6 +8,7 @@ from contextlib import asynccontextmanager
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from datetime import datetime
 import logging
+import os
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -51,11 +52,17 @@ async def manual_trigger():
         raise HTTPException(status_code=500, detail="Failed to fetch and store weather data.")
 
 # api endpoint to get current weather, for testing
-@app.get("/weather/current/{lat}/{lon}")
-async def get_current_weather(lat: float, lon: float, db: AsyncSession = Depends(get_db)):
+@app.get("/weather/current/{city}")
+async def get_current_weather(city: str, db: AsyncSession = Depends(get_db)):
+    
+    # pull env vars from city num
+    name = os.getenv("CITY" + city + "_NAME")
+    lat = float(os.getenv("CITY" + city + "_LAT"))
+    lon = float(os.getenv("CITY" + city + "_LON"))
+    
     # find location
     result = await db.execute(
-        select(Location).where(Location.lat == lat, Location.lon == lon)
+        select(Location).where(Location.lat == float(lat), Location.lon == float(lon))
     )
     location = result.scalars().first()
 
@@ -76,8 +83,9 @@ async def get_current_weather(lat: float, lon: float, db: AsyncSession = Depends
 
     return {
         "location": {
-            "lat": location.lat,
-            "lon": location.lon,
+            "name": name,
+            "lat": lat,
+            "lon": lon,
             "timezone": location.timezone
         },
         "weather": {
